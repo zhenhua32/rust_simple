@@ -1,11 +1,9 @@
 fn main() {
-    println!("Hello, world!");
+    let s = String::from("hello world");
 
-    let mut x = 5;
-    println!("The value of x is: {}", x);
-    x = 6;
-    println!("The value of x is: {}", x);
+    let hello = &s[0..5];
+    let world = &s[6..11];
 
-    const y: &str = "Hello, world!";
-    println!("The value of y is: {}", y);
+    println!("{} {}", hello, world);
+    println!("{:?}", s.chars().nth(5));
 }
