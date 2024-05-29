@@ -1,9 +1,21 @@
+#[derive(Debug)]
+struct User {
+    active: bool,
+    username: String,
+    email: String,
+    sign_in_count: u64,
+}
+
 fn main() {
-    let s = String::from("hello world");
+    let mut user1 = User {
+        active: true,
+        username: String::from("someusername123"),
+        email: String::from("someone@example.com"),
+        sign_in_count: 1,
+    };
 
-    let hello = &s[0..5];
-    let world = &s[6..11];
+    user1.email = String::from("anotheremail@example.com");
+    user1.sign_in_count = 12;
 
-    println!("{} {}", hello, world);
-    println!("{:?}", s.chars().nth(5));
+    println!("User1: {:?}", user1);
 }
