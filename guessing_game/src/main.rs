@@ -6,9 +6,9 @@ use std::io;
 fn main() {
     println!("猜测一个数字!");
 
-    let secret_number = rand::thread_rng().gen_range(1..=100);
+    let secret_number = rand::rng().random_range(1..=100);
 
-    // println!("秘密数字是: {}", secret_number);
+    println!("秘密数字是: {}", secret_number);
 
     loop {
         println!("请输入你的猜测.");
