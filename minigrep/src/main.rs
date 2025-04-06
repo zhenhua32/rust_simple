@@ -5,14 +5,31 @@ fn main() {
     let args: Vec<String> = env::args().collect();
     dbg!(&args);
 
-    let query = &args[1];
-    let filename = &args[2];
+    let config = parse_config(&args);
+    println!("Searching for {}", config.query);
+    println!("In file {}", config.filename);
 
-    println!("Searching for {}", query);
-    println!("In file {}", filename);
-
-    let contents = fs::read_to_string(filename).expect("Something went wrong reading the file");
+    let contents = fs::read_to_string(config.filename).expect("Something went wrong reading the file");
     println!("With text:\n{}", contents);
 
     println!("Hello, world!");
+}
+
+struct Config {
+    query: String,
+    filename: String,
+}
+
+
+fn parse_config(args: &[String]) -> Config {
+    if args.len() < 3 {
+        panic!("Not enough arguments");
+    } else if args.len() > 3 {
+        panic!("Too many arguments");
+    }
+
+    let query = args[1].clone();
+    let filename = args[2].clone();
+
+    Config { query, filename }
 }
