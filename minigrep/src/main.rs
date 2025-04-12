@@ -4,6 +4,7 @@ use std::process;
 use minigrep::Config;
 
 // 启动命令: cargo run -- "duct tape" poem.txt
+// 运行测试 cargo test
 fn main() {
     let args: Vec<String> = env::args().collect();
     dbg!(&args);
