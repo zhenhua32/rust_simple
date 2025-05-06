@@ -6,11 +6,9 @@ fn main() {
 
     let mut post = Post::new();
     post.add_text("Hello, world!");
-    assert_eq!(post.content(), "");
+    let post = post.request_review();
 
-    post.request_review();
-    assert_eq!(post.content(), "");
+    let post = post.approve();
 
-    post.approve();
     assert_eq!(post.content(), "Hello, world!");
 }

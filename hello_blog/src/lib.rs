@@ -1,88 +1,48 @@
 pub struct Post {
-    state: Option<Box<dyn State>>,
+    // state: Option<Box<dyn State>>,
     content: String,
 }
 
+pub struct DraftPost {
+    content: String,
+}
+
+impl DraftPost {
+    pub fn add_text(&mut self, text: &str) {
+        self.content.push_str(text);
+    }
+
+    pub fn request_review(self) -> PendingReviewPost {
+        PendingReviewPost {
+            content: self.content,
+        }
+    }
+}
+
 impl Post {
-    pub fn new() -> Post {
-        Post {
-            state: Some(Box::new(Draft {})),
+    pub fn new() -> DraftPost {
+        DraftPost {
             content: String::new(),
         }
+    }
+
+    pub fn content(&self) -> &str {
+        &self.content
     }
 
     pub fn add_text(&mut self, text: &str) {
         self.content.push_str(text);
     }
+}
 
-    pub fn content(&self) -> &str {
-        self.state.as_ref().unwrap().content(&self)
-    }
+pub struct PendingReviewPost {
+    content: String,
+}
 
-    pub fn request_review(&mut self) {
-        if let Some(s) = self.state.take() {
-            self.state = Some(s.request_review())
+impl PendingReviewPost {
+    pub fn approve(self) -> Post {
+        Post {
+            content: self.content,
         }
-    }
-
-    pub fn approve(&mut self) {
-        if let Some(s) = self.state.take() {
-            self.state = Some(s.approve())
-        }
-    }
-}
-
-trait State {
-    fn request_review(self: Box<Self>) -> Box<dyn State>;
-    fn approve(self: Box<Self>) -> Box<dyn State>;
-    fn content<'a>(&self, post: &'a Post) -> &'a str {
-        let _ = post;
-        ""
-    }
-}
-
-struct Draft {}
-
-impl State for Draft {
-    // 从 Draft 状态转换到 PendingReview 状态
-    fn request_review(self: Box<Self>) -> Box<dyn State> {
-        Box::new(PendingReview {})
-    }
-
-    // 没有改变
-    fn approve(self: Box<Self>) -> Box<dyn State> {
-        self
-    }
-}
-
-struct PendingReview {}
-
-impl State for PendingReview {
-    // 没有改变
-    fn request_review(self: Box<Self>) -> Box<dyn State> {
-        self
-    }
-
-    // 从 PendingReview 状态转换到 Published 状态
-    fn approve(self: Box<Self>) -> Box<dyn State> {
-        Box::new(Published {})
-    }
-}
-
-struct Published {}
-
-impl State for Published {
-    // 没有改变
-    fn request_review(self: Box<Self>) -> Box<dyn State> {
-        self
-    }
-
-    // 没有改变
-    fn approve(self: Box<Self>) -> Box<dyn State> {
-        self
-    }
-
-    fn content<'a>(&self, post: &'a Post) -> &'a str {
-        &post.content
     }
 }
